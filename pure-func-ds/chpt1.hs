@@ -19,6 +19,16 @@ suffs xx@(x:xs) = xx:(suffs xs)
 data Tree a = EmptyNode | FilledNode a (Tree a) (Tree a) deriving (Show,Eq)
 
 
+--- Write a function the pretty prints tree structures
+--  This approach uses a constant width text field, 
+--  then determines the spacng between the numbers
+--  For extra spaces, then are added to the end
+--  However, there is some obvious mismatch, and a better 
+--  approach would be to to line up things via the center, 	
+--  --  or start counting from the bottom up...
+-- Finally, assuming the digist would be 2 or three characters
+-- may also help the mis-aligments 
+
 buildTree' ::  (Ord a) =>  [a] -> Tree a
 buildTree' [] = EmptyNode
 buildTree' (x:[]) = FilledNode x (EmptyNode) (EmptyNode)
@@ -105,6 +115,11 @@ getWidthOnRange items  =
     -- items_str =  (map (\z -> [(show z)]) items)  ++ [[""]]
     zipp = zipWith (++) (gaps_reg ++ gaps_extra)  items_str
   in concat (concat zipp)
+
+getWidthLevel :: 
+
+
+
 {-
 -}
 
@@ -124,13 +139,82 @@ getLevelIdx tree True =
 
 
 t1 :: (Ord a, Enum a, Num a) => Tree a
-t1 = buildTree [0..22]
+t1 = buildTree [0..10]
 t1disp :: (Ord a, Enum a, Num a)=> (Num b, Eq b) => [(Maybe a, b, String)]
 t1disp =  displayTree t1
 -- t1_1 :: [(Maybe a1, a String)]
-t1_1 = getLevelFromTree t1 [0..(getDeepestLevelIndex t1)] !! 1
-t1_a = getLevelFromTree t1 [0..(getDeepestLevelIndex t1)] 
-t1_0 = getLevelIdx t1 True
-t1_vals = [map (\(maybeValue,y,z)-> (convValues maybeValue)) (t1_a !! x) | x <- [0..(getDeepestLevelIndex t1)] ]
+let t1_1 = getLevelFromTree t1 [0..(getDeepestLevelIndex t1)] !! 1
+let t1_a = getLevelFromTree t1 [0..(getDeepestLevelIndex t1)] 
+let t1_0 = getLevelIdx t1 True
+let t1_vals = [map (\(maybeValue,y,z)-> (convValues maybeValue)) (t1_a !! x) | x <- [0..rows] ] where rows = (getDeepestLevelIndex t1) - 1
+let tnaught = fmap  (fmap ( \(numstr) -> if numstr == "*" then "  " else numstr)) t1_vals
+let tv = fmap (fmap ( \(numstr) -> if length numstr > 1 then numstr else "+" ++ numstr)) tnaught
+
 -- t1_tree = map (getWidthOnRange .t1_vals
 -- do { putStrLn $ concat $ intersperse "\n" (map getWidthOnRange  t1_vals)}
+--
+--
+--"..............+5.............."
+{-
+(concat $ replicate 7 ".." ) ++ (concat $ intersperse (concat $ replicate 0 "..") (tv !! 0)) ++ (concat $ replicate 7 ".." )
+"..............+5.............."
+*Main Data.List Data.List.Split Control.Monad> (concat $ replicate 3 ".." ) ++ (concat $ intersperse (concat $ replicate 6 "..") (tv !! 1)) ++ (concat $ replicate 3 ".." )
+"......+2............+8......"
+*Main Data.List Data.List.Split Control.Monad> ".." ++ (concat $ intersperse "......" (tv !! 2)) ++ ".."
+"..+1......+7......+4......10.."
+*Main Data.List Data.List.Split Control.Monad>  concat $ intersperse ".." (tv !! 3)
+"+0..+6..+3..+9..  ..  ..  ..  "
+*Main Data.List Data.List.Split Control.Monad> 
+
+
+
+
+"+5"
+
+"..+5.."
+"+2..+8"
+
+"......+5......"
+"..+2......+8.."
+"+1..+7..+4..10"
+
+"..............+5.............."
+"......+2..............+8......"
+"..+1......+7......+4......10.."
+"+0..+6..+3..+9..  ..  ..  ..  "
+
+"..............+5.............."
+"......+2..........+8.........."
+"..+1......+7....+4..10........"
+"+0..+6..+3..+9............... "
+
+first line, no-spaces: add second line, add new spaces on each side of first line
+third line: add two new spaces on each side of second line numbers, add 4 spaces on first line
+fourth line: add two new spaces on each side of 3rd, 4 on second, 8 on first
+
+
+root: left spaces = 2x number of nodes in left branch, same for right
+
+
+-}
+
+-- calculate lbranch and right branch nodes
+--
+--
+--
+countBranches :: Tree a -> (Num, Num)
+
+
+
+
+
+
+
+
+
+[(s1,Num,s1),(s21,Num,s22,Num,s23),(
+
+
+
+
+-}
