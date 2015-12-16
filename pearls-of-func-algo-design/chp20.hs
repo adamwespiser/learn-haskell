@@ -86,8 +86,8 @@ search n d ev ((e, v) : evs)
 countdown1 :: Int -> [Int] -> (Expr, Value)
 countdown1 n = nearest n . concatMap mkExprs . subseqs
 
-
-
+runTest :: String
+runTest = show (countdown1 831 [1,3,7,10,25,50])
 
 
 
