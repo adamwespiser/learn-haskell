@@ -46,9 +46,9 @@ legal Div v1 v2 = (mod v1 v2 == 0) -- can't be a fractional number
 mkExprs :: [Int] -> [(Expr, Value)]
 mkExprs [x] = [(Num x, x)]
 mkExprs xs = [ev | (ys, zs) <- unmerges xs, 
-                   ev1      <- mkExprs ys, 
-                   ev2      <- mkExprs zs, 
-                   ev       <- combine ev1 ev2 ]
+  ev1      <- mkExprs ys, 
+  ev2      <- mkExprs zs, 
+  ev       <- combine ev1 ev2 ]
 
 -- concatMap :: Foldable t => (a -> [b]) -> t a -> [b]
 -- > concatMap (\x -> [(x,x+1)]) [10,20,30] == [(10,11),(20,21),(30,31)]
