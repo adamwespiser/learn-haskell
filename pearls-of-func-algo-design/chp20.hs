@@ -14,7 +14,7 @@ type Value = Int
 
 -- get all the subsequences for a list of integers
 subseqs [x] = [[x]]
-subseqs (x:xs) = xss ++ [x] : map (x:) xss
+subseqs (x:xs) = xss ++ ([x] : map (x:) xss)
   where xss = subseqs xs
 
 -- apply = take a function and apply it to argument
