@@ -1,12 +1,13 @@
 -- Types and Programming Languages
 -- Chapter 5: Untyped Lambda Calculus
 --
+tru :: a -> a -> a
 tru = \t -> \f -> t
+fls :: a -> a -> a
 fls = \t -> \f -> f
 test = \l -> \m -> \n -> l m n
 and' = \b -> \c -> b c fls
 not' = \b -> \t -> \f -> b f t
-
 
 -- test tru v w
 -- (\l -> \m -> \n -> l m n) tru v w
@@ -33,6 +34,11 @@ not' = \b -> \t -> \f -> b f t
 -- (\b -> \t -> \f -> b f t) tru
 -- (\t -> \f -> tru f t)
 -- or == (\p -> \q -> p p q)
---
---
---
+
+churchToHask :: (Bool -> Bool -> Bool) -> Bool
+churchToHask b = b True False
+
+haskToChurch :: Bool -> (a -> a -> a)
+haskToChurch b = if b then tru else fls
+
+
