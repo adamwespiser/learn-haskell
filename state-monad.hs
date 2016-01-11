@@ -48,6 +48,16 @@ lookupSafe nm ctx = case (Map.lookup nm ctx) of
 lookupName :: String -> EnvState
 lookupName nm = state $ \s -> (lookupSafe nm s, s)
 
+{-
+assignVar :: String -> Val -> Eval ()
+assignVar name val = do
+ st <- get
+ put $ Map.insert name val st
+
+lookupVar name = do
+ st <- get
+ return $ Map.lookup name st
+-}
 -- runState  (assign  "aa" (VInt 1) >>= (\s -> lookupName "aa"))  demoStore
 -- runState  (assign  "aa" (VInt 1))  demoStore
 
