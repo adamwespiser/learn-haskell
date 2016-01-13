@@ -21,11 +21,11 @@ data Ty  = TyArr Ty Ty
 type Info = String
 data Term = 
     TmVar Info Int Int
-  | TmAbs Info Info Ty Term
+  | TmAbs Info String Ty Term
   | TmApp Info Term Term 
   | TmTrue Info
   | TmFalse Info
-  | TmIf Info Term Term Term
+  | TmIf Info Term Term Term deriving (Eq, Show)
   
 -- Add a variable & binding to the store
 -- x is a string (variable name), bind is a binding
@@ -68,6 +68,11 @@ showError bd = case bd of
   (VarBind  ty)  -> show ty
 
 
+showTypes :: [Ty] -> String
+showTypes (x:xs) = (show x) ++ " " ++ showTypes xs
+showTypes (x:_) = show x
+showTypes _ = ""
+
 -- recursive function: get the type of a given argument...
 typeof :: Context -> Term -> Ty
 typeof ctx t = case t of
@@ -81,8 +86,8 @@ typeof ctx t = case t of
         tyT2 = typeof ctx t2
     in case tyT1 of
       TyArr tyT11 tyT12 -> 
-        if (==) tyT2 tyT11 then tyT12 else TyError $ "parameter mismatch" ++ fi
-      _                 -> TyError $ "arrow type expected" ++ fi
+        if ((==) tyT2 tyT11) then tyT12 else TyError $ "parameter mismatch" ++ fi
+      _                 -> TyError $ "arrow type expected " ++ fi ++ showTypes [tyT1,tyT2]
   TmTrue msg  -> TyBool 
   TmFalse msg -> TyBool 
   TmIf fi t1 t2 t3 -> 
@@ -108,11 +113,27 @@ eval t = case nf t of
 emptyContext :: Context
 emptyContext = []
 
+idBool :: Term
+idBool = (TmAbs "" "x" TyBool  (TmVar "" 0 1))
+
+
+{-  TESTS
+typeof emptyContext (TmIf "if" (TmTrue "t") (TmFalse "t") (TmTrue "t"))
+-}
+
 {-  TESTS
 typeof emptyContext (TmIf "if" (TmTrue "t") (TmFalse "t") (TmTrue "t"))
 
+  -- TmVar Info Int Int  -- lambda
+  -- TmAbs Info String Ty Term  -- inside
+  -- TmApp Info Term Term  -- appyly lambda inside..
 
+typeof emptyContext $ TmAbs "" "x" TyBool  (TmAbs "" "y" TyBool  (TmApp ""  (TmVar ""  1 2) (TmVar "" 1 2)))
 
+typeof [("y",VarBind TyBool)] (TmApp "" idBool (TmVar " " 0 1))
+
+data Maybe a = Just a | Nothing deriving (Show)
+-}
 
 
 
